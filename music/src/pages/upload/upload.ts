@@ -77,7 +77,7 @@ export class UploadPage {
     var message = "";
 
     /*cehck services were selected*/
-    if (this.videoAdded == false) {
+    if (this.videoAdded == true) {
       message = 'Please add a video.';
       this.displayToast(message);
       return;
