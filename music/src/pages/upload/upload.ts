@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController, Loading, ToastC
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { MediaCapture, MediaFile, CaptureError, CaptureVideoOptions, CaptureImageOptions } from '@ionic-native/media-capture';
 import * as firebase from 'firebase';
+import { VideoService } from '../../providers/video.service';
 
 @IonicPage()
 @Component({
@@ -27,7 +28,8 @@ export class UploadPage {
               private camera: Camera, 
               private mediaCapture: MediaCapture,
               private loading: LoadingController,
-              private toast: ToastController,) {
+              private toast: ToastController,
+              private videoService: VideoService) {
     this.loader = this.loading.create({
       content: 'Adding music to video...'
     });
@@ -77,7 +79,7 @@ export class UploadPage {
     var message = "";
 
     /*cehck services were selected*/
-    if (this.videoAdded == true) {
+    if (this.videoAdded == false) {
       message = 'Please add a video.';
       this.displayToast(message);
       return;
@@ -90,51 +92,38 @@ export class UploadPage {
       var imageId = (new Date()).getTime();
       console.log('on finish');
 
-      // /*format the name for firebase*/
-      // var storageRef = firebase.storage().ref();
-      // var serviceMediaRef = storageRef.child(`music/videos/${imageId}.mp4`);
-      // try {
-      //   var snapshot;
-      //   var type = 'video';
-      //   if (this.pictureAdded) {
-      //     snapshot = await serviceMediaRef.putString(this.serviceMediaFull, 'data_url');
-      //   } else if (this.videoAdded) {
-      //     snapshot = await serviceMediaRef.put(this.serviceMediaFull);
-      //   }
-      //   console.log('placed in storage');
-      //   var batch = firebase.firestore().batch(); /*for running batch*/
-      //   var downloadUrl = snapshot.downloadURL;
+      /*format the name for firebase*/
+      var storageRef = firebase.storage().ref();
+      var serviceMediaRef = storageRef.child(`music/videos/${imageId}.mp4`);
+      try {
+        var snapshot;
+        var type = 'video';
+        if (this.pictureAdded) {
+          snapshot = await serviceMediaRef.putString(this.serviceMediaFull, 'data_url');
+        } else if (this.videoAdded) {
+          snapshot = await serviceMediaRef.put(this.serviceMediaFull);
+        }
+        console.log('placed in storage');
+        var batch = firebase.firestore().batch(); /*for running batch*/
+        var downloadUrl = snapshot.downloadURL;
 
-      //   /*make post and send to all*/
-      //   var videos = {
-      //     postId: imageId,
-      //     timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
-      //     URL: downloadUrl,
-      //     type: type
-      //   };
+        /*make post and send to all*/
+        var videos = {
+          postId: imageId,
+          timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+          URL: downloadUrl,
+          type: type
+        };
 
-      //   firebase.firestore().collection('videos')
-      //     .doc(`${imageId}`)
-      //     .set(videos);
-
-      //   this.loader.dismiss();
-      //   this.navCtrl.setRoot(this.navCtrl.getActive().component);
-
-      var videos = {
-        id: 1,
-        timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
-        URL: "myUrl",
-        type: "video"
-      };
-
-      firebase.firestore().collection('videos')
-        .doc(`${imageId}`)
-        .set(videos);
+      const result = await this.videoService.uploadVideo(videos, imageId);
+      console.log(result);
 
       this.loader.dismiss();
-      this.navCtrl.setRoot(this.navCtrl.getActive().component);
+      this.navCtrl.push('TabsPage');
 
-      // }
+      }catch(e){
+        console.log(e);
+      }
     }
   }
 

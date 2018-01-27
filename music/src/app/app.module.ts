@@ -15,6 +15,7 @@ import { FIREBASE_CONFIG } from './app.firebase.config';
 //cordova plugins
 import { Camera } from '@ionic-native/camera';
 import { MediaCapture } from '@ionic-native/media-capture';
+import { VideoService } from '../providers/video.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { MediaCapture } from '@ionic-native/media-capture';
     SplashScreen,
     Camera,
     MediaCapture,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    VideoService
   ]
 })
 export class AppModule {}
