@@ -90,38 +90,51 @@ export class UploadPage {
       var imageId = (new Date()).getTime();
       console.log('on finish');
 
-      /*format the name for firebase*/
-      var storageRef = firebase.storage().ref();
-      var serviceMediaRef = storageRef.child(`music/videos/${imageId}.mp4`);
-      try {
-        var snapshot;
-        var type = 'video';
-        if (this.pictureAdded) {
-          snapshot = await serviceMediaRef.putString(this.serviceMediaFull, 'data_url');
-        } else if (this.videoAdded) {
-          snapshot = await serviceMediaRef.put(this.serviceMediaFull);
-        }
-        console.log('placed in storage');
-        var batch = firebase.firestore().batch(); /*for running batch*/
-        var downloadUrl = snapshot.downloadURL;
+      // /*format the name for firebase*/
+      // var storageRef = firebase.storage().ref();
+      // var serviceMediaRef = storageRef.child(`music/videos/${imageId}.mp4`);
+      // try {
+      //   var snapshot;
+      //   var type = 'video';
+      //   if (this.pictureAdded) {
+      //     snapshot = await serviceMediaRef.putString(this.serviceMediaFull, 'data_url');
+      //   } else if (this.videoAdded) {
+      //     snapshot = await serviceMediaRef.put(this.serviceMediaFull);
+      //   }
+      //   console.log('placed in storage');
+      //   var batch = firebase.firestore().batch(); /*for running batch*/
+      //   var downloadUrl = snapshot.downloadURL;
 
-        /*make post and send to all*/
-        var videos = {
-          postId: imageId,
-          timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
-          URL: downloadUrl,
-          type: type
-        };
+      //   /*make post and send to all*/
+      //   var videos = {
+      //     postId: imageId,
+      //     timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+      //     URL: downloadUrl,
+      //     type: type
+      //   };
 
-        firebase.firestore().collection('videos')
-          .doc(`${imageId}`)
-          .set(videos);
+      //   firebase.firestore().collection('videos')
+      //     .doc(`${imageId}`)
+      //     .set(videos);
 
-        this.loader.dismiss();
-        this.navCtrl.setRoot(this.navCtrl.getActive().component);
-      } catch (err) {
-        console.log('something went wrong with the batch', err.message);
-      }
+      //   this.loader.dismiss();
+      //   this.navCtrl.setRoot(this.navCtrl.getActive().component);
+
+      var videos = {
+        id: 1,
+        timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+        URL: "myUrl",
+        type: "video"
+      };
+
+      firebase.firestore().collection('videos')
+        .doc(`${imageId}`)
+        .set(videos);
+
+      this.loader.dismiss();
+      this.navCtrl.setRoot(this.navCtrl.getActive().component);
+
+      // }
     }
   }
 
