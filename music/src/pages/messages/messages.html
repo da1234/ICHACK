@@ -1,0 +1,22 @@
+<ion-header>
+
+  <ion-navbar no-border>
+    <ion-title>Darrell Adjei</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="main">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <app-chat-message *ngFor="let message of messageList;" [chatMessage]="message" [userId]="userId"></app-chat-message>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <app-message-box (sendMessage)="sendMessage($event)"></app-message-box>
+    <!-- <app-message-box></app-message-box> -->
+  </ion-toolbar>
+</ion-footer>

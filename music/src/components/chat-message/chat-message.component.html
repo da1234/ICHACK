@@ -1,0 +1,31 @@
+<ion-item no-lines class="chat-message__message-right" *ngIf = "chatMessage.userFromId === userId; else from">
+    <!-- <ion-avatar item-right>
+      <img src="https://firebasestorage.googleapis.com/v0/b/socialancedev-a195c.appspot.com/o/1517110228148.jpg?alt=media&token=8268c8a0-b595-4f69-8592-ba416ad4d75f" alt="">
+    </ion-avatar> -->
+    <!-- <p>{{chatMessage?.timeStamp}}</p> -->
+    <p>{{chatMessage?.userFromProfile?.firstName}} {{chatMessage?.userFromProfile?.secondName}}</p>
+    <button (click)="playMusic(chatMessage)" class="item-right">
+      <img class="pictureClass item-right" [ngClass]="class1" src={{chatMessage?.content}}>
+    </button>
+    <audio>
+      <source src={{chatMessage?.audio}} type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </ion-item>
+  
+  <ng-template #from>
+    <ion-item no-lines class="chat-message__message-left">
+      <!-- <ion-avatar item-left>
+        <img src="https://firebasestorage.googleapis.com/v0/b/socialancedev-a195c.appspot.com/o/freelancers%2FSzbDETy6Twg5MwKjGe70yeaFGXy1%2Fall_images%2F1515623210292.jpg?alt=media&token=02aa61b0-9374-4551-986d-5ce9ae1f8105" alt="">
+      </ion-avatar> -->
+      <p>{{chatMessage?.userFromProfile?.firstName}} {{chatMessage?.userFromProfile?.secondName}}</p>
+      <!-- <p>{{chatMessage?.timeStamp}}</p> -->
+      <button (click)="playMusic(chatMessage)">
+        <img class="pictureClass item-left" [ngClass]="class1" src={{chatMessage?.content}}>
+      </button>
+      <audio>
+        <source src={{chatMessage?.audio}} type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </ion-item>
+  </ng-template>
